@@ -1,7 +1,7 @@
-import { contextBridge, ipcRenderer } from "electron"
+import { contextBridge, ipcRenderer } from 'electron'
 
 // --------- Expose some API to the Renderer process ---------
-contextBridge.exposeInMainWorld("ipcRenderer", withPrototype(ipcRenderer))
+contextBridge.exposeInMainWorld('ipcRenderer', withPrototype(ipcRenderer))
 
 // `exposeInMainWorld` can't detect attributes and methods of `prototype`, manually patching it.
 function withPrototype(obj: Record<string, any>) {
@@ -10,7 +10,7 @@ function withPrototype(obj: Record<string, any>) {
   for (const [key, value] of Object.entries(protos)) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) continue
 
-    if (typeof value === "function") {
+    if (typeof value === 'function') {
       // Some native APIs, like `NodeJS.EventEmitter['on']`, don't work in the Renderer process. Wrapping them into a function.
       obj[key] = function (...args: any) {
         return value.call(obj, ...args)
@@ -24,13 +24,13 @@ function withPrototype(obj: Record<string, any>) {
 
 // --------- Preload scripts loading ---------
 function domReady(
-  condition: DocumentReadyState[] = ["complete", "interactive"]
+  condition: DocumentReadyState[] = ['complete', 'interactive']
 ) {
   return new Promise((resolve) => {
     if (condition.includes(document.readyState)) {
       resolve(true)
     } else {
-      document.addEventListener("readystatechange", () => {
+      document.addEventListener('readystatechange', () => {
         if (condition.includes(document.readyState)) {
           resolve(true)
         }
@@ -87,12 +87,12 @@ function useLoading() {
   z-index: 9;
 }
     `
-  const oStyle = document.createElement("style")
-  const oDiv = document.createElement("div")
+  const oStyle = document.createElement('style')
+  const oDiv = document.createElement('div')
 
-  oStyle.id = "app-loading-style"
+  oStyle.id = 'app-loading-style'
   oStyle.innerHTML = styleContent
-  oDiv.className = "app-loading-wrap"
+  oDiv.className = 'app-loading-wrap'
   oDiv.innerHTML = `<div class="${className}"><div></div></div>`
 
   return {
@@ -113,7 +113,7 @@ const { appendLoading, removeLoading } = useLoading()
 domReady().then(appendLoading)
 
 window.onmessage = (ev) => {
-  ev.data.payload === "removeLoading" && removeLoading()
+  ev.data.payload === 'removeLoading' && removeLoading()
 }
 
 setTimeout(removeLoading, 4999)
