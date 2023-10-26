@@ -1,6 +1,6 @@
+import { Root } from "@http-client/root"
 import React from "react"
 import ReactDOM from "react-dom/client"
-import { Root } from "./root"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
